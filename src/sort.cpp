@@ -68,10 +68,33 @@ void insert_sort( int* a, int size )
 	}
 }
 
-
+/*冒泡排序
+算法描述: 在剩余元素中，从一个方向往另一个方向按照顺序两两交换，即每一轮把最大或最小的元素沉到剩余数组尾部
+性能分析:比较次数 ~N*N/2, 交换次数过多
+是否稳定：否
+是否原地：是
+时间复杂度：~N*N
+空间复杂度：1
+用途：冒泡排序在随机情况下可能是最慢的算法，但是由于可以检测出当前已经有序而迅速break，所以在基本有序的情况下有一定的出场机会
+*/
 void bubble_sort( int* a, int size )
 {
+	bool changed;
+	for( int i = 0; i < size; ++i )
+	{
+		changed = false;
+		for( int j = size-1; j > i; --j )
+		{
+			if( a[j] < a[j-1] )
+			{
+				exch(a, j, j-1);
+				changed = true;
+			}
+		}
 
+		if( !changed )
+			break;
+	}
 }
 
 
@@ -298,6 +321,18 @@ int main( int argc, char* argv[])
 		{
 			std::cout << "bubble sort wrong!" << std::endl;
 		}		
+
+		c.start();
+		bubble_sort( acopy, size );
+		c.stop();
+		if( check_result(acopy, size) )
+		{
+			std::cout << "bubble sort after sort cost time: " << c.duration() << "s" << std::endl;
+		}
+		else
+		{
+			std::cout << "bubble sort after sort wrong!" << std::endl;
+		}				
 	}	
 
 
