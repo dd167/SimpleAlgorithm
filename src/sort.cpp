@@ -2,6 +2,7 @@
 #include "base.h"
 #include "clock.h"
 
+
 inline void exch( int* a, int i, int j )
 {
 	int t = a[i];

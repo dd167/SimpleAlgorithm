@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <random>
+
 typedef int int32;
 typedef unsigned int uint32;
 typedef short int16;
@@ -44,6 +46,22 @@ inline const T clamp( const T& value, const T& low, const T& high )
 
 inline int random(int min, int max)
 {
-	int range = abs(max-min);
-	return (rand()*rand())%(range+1) + (min > max ? max : min); 
+	//int range = abs(max-min);
+	//return (rand()*rand())%(range+1) + (min > max ? max : min);
+	std::default_random_engine e;
+	std::uniform_int_distribution<int> u(min,max);
+	return u(e); 
 }
+
+
+template< class T>
+class Comparable
+{
+public:
+	virtual int compareTo(const T& that) = 0;
+	virtual ~Comparable() = default;
+};
+
+
+
+
