@@ -9,8 +9,8 @@ int main()
 	std::uniform_int_distribution<int> u(0,100);
 
 
-	PQ<int,true> minPQ;
-	PQ<int,false> maxPQ;
+	PQ<int> minPQ;
+	PQ<int, std::greater<int>> maxPQ;
 	for( int i = 0; i < 20; ++i )
 	{
 		int rnd = u(e);

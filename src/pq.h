@@ -8,7 +8,7 @@
 
 
 
-template<class T, bool MinHeap=true>
+template<class T, class Comp = std::less<T> >
 class PQ
 {
 public:
@@ -81,10 +81,7 @@ private:
 
 	bool compare( int i, int j )
 	{
-		if( MinHeap )
-			return data[j] < data[i];
-		else
-			return data[i] < data[j];	
+		return Comp()(data[i], data[j]);
 	}
 
 	void exch( int i, int j )
