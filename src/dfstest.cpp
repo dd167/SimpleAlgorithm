@@ -1,6 +1,6 @@
 #include "dfs.h"
 #include <iostream>
-
+#include "bfs.h"
 
 int main()
 {
@@ -19,11 +19,10 @@ int main()
 	}
 
 	DepthFirstPath dfp(g, 0);
-
 	std::vector<int> pathTo4 = dfp.pathTo(4);
 	if( pathTo4.empty() )
 	{
-		std::cout << "there is no way from 0 to 4" << std::endl;
+		std::cout << "[dfs]there is no way from 0 to 4" << std::endl;
 	}
 	else
 	{
@@ -33,6 +32,25 @@ int main()
 		}
 		std::cout << std::endl;
 	}
+
+
+	BreadFirstPaths bfp( g, 0 );
+	pathTo4 = bfp.pathTo( 4 );
+	if( pathTo4.empty() )
+	{
+		std::cout << "[bfs]there is no way from 0 to 4" << std::endl;
+	}
+	else
+	{
+		for( auto i : pathTo4 )
+		{
+			std::cout << i << "->";
+		}
+		std::cout << std::endl;
+	}
+
+
+
 
 	Cycle cy(g);
 	if( cy.hasCycle() )
