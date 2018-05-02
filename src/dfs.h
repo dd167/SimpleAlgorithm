@@ -153,13 +153,78 @@ private:
 };
 
 
+/*
+	有向图寻找环
+
+*/
+#include <stack>
+class DirectedCycle
+{
+private:
+	bool* _marked;
+	int * _edgeTo;
+	std::stack<int> _cycle;
+	bool* _onStack;
+public:
+
+	DirectedCycle( const Digraph& g )
+	{
+
+	}
+
+	bool hasCycle()
+	{
+		return !_cycle.empty();
+	}
+
+	std::stack<int>& cycle()
+	{
+		return _cycle;
+	}
+
+private:
+	void dfs( const Digraph& g, int v )
+	{
+		_onStack[v] = true;
+		_marked[v] = true;
+
+		for( int w : g.adj(v) )
+		{
+			if( hasCycle() )
+				return;
+			else if( !_marked[w] )
+			{
+				_edgeTo[w] = v;
+				dfs( g, w );
+			}
+			else if( _onStack[w] )
+			{
+				//found cycle
+				for( int x = v; x != w; x = _edgeTo[x] )
+					_cycle.push(x);
+
+				_cycle.push( w );
+				_cycle.push( v );
+			}
+		}
+
+		_onStack[v] = false;
+
+	}
+
+
+};
+
+
+
+
 
 
 /*
 	G是二分图吗？（双色问题）
 
 */
-#include <iostream>
+
 class TwoColor
 {
 public:

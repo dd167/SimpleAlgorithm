@@ -68,7 +68,7 @@ public:
 		return _adj[v];
 	}
 
-	Digraph reverse()
+	Digraph reverse() const
 	{
 		Digraph nd(_V);
 		for( int v = 0; v < _V; ++v )
