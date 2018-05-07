@@ -1,6 +1,7 @@
 #include <iostream>
 #include "bag.h"
 #include "graph.h"
+#include <string>
 
 
 int main()

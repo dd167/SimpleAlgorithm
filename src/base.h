@@ -1,6 +1,9 @@
 ﻿#pragma once
 
+#include <stdio.h>
 #include <random>
+#include <string>
+#include <iostream>
 
 typedef int int32;
 typedef unsigned int uint32;
@@ -61,6 +64,25 @@ public:
 	virtual int compareTo(const T& that) = 0;
 	virtual ~Comparable() = default;
 };
+
+
+
+std::string format(const char* _format, ...)
+{
+	va_list argptr;
+	va_start( argptr, _format );
+	int count = snprintf(NULL, 0, _format, argptr );
+	va_end( argptr );
+
+	va_start(argptr, _format);
+	char* buf = (char*)malloc(count* sizeof(char));
+	snprintf( buf,  count, _format, argptr);
+	va_end( argptr );
+
+	std::string str( buf, count );
+	free( buf );
+	return str;
+}
 
 
 

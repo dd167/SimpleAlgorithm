@@ -54,7 +54,7 @@ private:
 	*/
 	void swim( int k )
 	{
-		while( k > 1 && compare(k/2, k) )
+		while( k > 1 && !compare(k/2, k) )
 		{
 			exch(k/2, k);
 			k = k/2;
@@ -70,9 +70,9 @@ private:
 		while(2*k <= N)
 		{
 			int j = 2 * k;
-			if( j < N && compare(j,j+1) )
+			if( j < N && !compare(j,j+1) )
 				++j;
-			if( !compare(k, j))
+			if( compare(k, j))
 				break;
 			exch( k, j );
 			k = j;
@@ -96,3 +96,37 @@ private:
 private:
 	std::vector<T> data; //data[0]不用
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
