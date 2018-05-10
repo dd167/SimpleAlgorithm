@@ -4,6 +4,9 @@
 #include <random>
 #include <string>
 #include <iostream>
+#include <stdarg.h>
+#include <functional>
+#include <assert.h>
 
 typedef int int32;
 typedef unsigned int uint32;
