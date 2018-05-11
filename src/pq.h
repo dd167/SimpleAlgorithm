@@ -193,6 +193,20 @@ public:
 		return ret;
 	}
 
+	void remove( int k )
+	{
+		if( !contains(k) )
+			return;
+
+		int index = _qp[k];
+		exch( index, _N-- );
+		swim( index );
+		sink( index );
+		_items[k] = T(); //
+		_qp[k] = -1;
+	}
+
+
 private:
 	/*
 		由下至上的堆有序化（上浮）

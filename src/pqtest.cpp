@@ -55,6 +55,17 @@ int main()
 	{
 		std::cout << idxPq.topIndex() << "=" << idxPq.pop() << ",";
 	}
+	std::cout << std::endl;
+
+	idxPq.push(1, 1000);
+	idxPq.push(2, 900);
+	idxPq.push(3, 1100);		
+	idxPq.remove(2);
+	while( !idxPq.empty() )
+	{
+		std::cout << idxPq.topIndex() << "=" << idxPq.pop() << ",";
+	}	
+
 
 	return 0;
 }
