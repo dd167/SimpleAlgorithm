@@ -189,9 +189,23 @@ private:
 	double _weight;
 
 public:
+	DirectedEdge() : _v(-1), _w(-1), _weight(0)
+	{}
+
 	DirectedEdge( int v, int w, double weight ) : _v(v), _w(w), _weight(weight)
 	{
 
+	}
+
+	bool isValid()
+	{
+		return _v != -1 && _w != -1;
+	}
+
+	void clear()
+	{
+		_v = _w = -1;
+		_weight = 0;
 	}
 
 	double weight() const { return _weight; }

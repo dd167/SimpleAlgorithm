@@ -116,6 +116,7 @@ public:
 	IndexPQ( int maxN ) 
 	{
 		_N = 0;
+		_MaxN = maxN;
 		_items = new T[ maxN + 1  ];
 		_pq = new int[ maxN + 1 ];
 		_qp = new int[ maxN + 1 ];
@@ -124,6 +125,16 @@ public:
 	}
 
 	~IndexPQ() = default;
+
+	void clear()
+	{
+		_N = 0;
+		for( int i = 0; i <= _MaxN; ++i )
+		{
+			_qp[i] = -1;
+		}
+	}
+
 
 	bool empty()
 	{
@@ -190,6 +201,7 @@ public:
 		_qp[minKey] = -1; //delete
 		_items[minKey] = T(); //
 		_pq[_N+1] = -1;	 //delete
+
 		return ret;
 	}
 
@@ -258,6 +270,7 @@ private:
 	T*	 _items; 	//元素数组
 	int* _pq;       //索引二叉堆，从1开始, 即从数组下标->绑点索引
 	int* _qp;		//逆序：_qp[_pq[i]] = _pq[_qp[i]] = i， 即从绑定索引->数组下标
+	int _MaxN;
 };
 
 
