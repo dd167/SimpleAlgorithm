@@ -55,6 +55,13 @@ public:
 
 	}
 
+
+	~LazyPrimMST()
+	{
+		delete [] _marked;
+	}
+
+
 	std::list<Edge>& edges()
 	{
 		return mst;

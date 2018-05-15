@@ -24,6 +24,12 @@ public:
 		bfs( g, s );
 	}
 
+	~BreadFirstPaths()
+	{
+		delete [] _marked;
+		delete [] _edgeTo;
+	}
+
 	bool hasPathTo( int v )
 	{
 		return _marked[v];

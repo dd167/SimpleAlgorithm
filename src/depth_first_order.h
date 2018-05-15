@@ -25,6 +25,14 @@ public:
 				dfs( g, v );
 	}
 
+	DepthFirstOrder( const EdgeWeightedDigraph& g  )
+	{
+		_marked = new bool[g.V()];
+		for( int v = 0; v < g.V(); ++v )
+			if( !_marked[v] )	
+				dfs( g, v );
+	}
+
 	std::list<int>& pre()
 	{
 		return _preOrder;
@@ -54,5 +62,20 @@ private:
 		_reversePostOrder.push_front( v );
 	}
 
+	void dfs( const EdgeWeightedDigraph& g, int v )
+	{
+		_preOrder.push_back( v );
+
+		_marked[v] = true;
+		for( DirectedEdge e : g.adj(v) )
+		{
+			int t = e.to();
+			if( !_marked[t] )
+				dfs( g, t);
+		}
+
+		_postOrder.push_back( v );
+		_reversePostOrder.push_front( v );
+	}
 
 };

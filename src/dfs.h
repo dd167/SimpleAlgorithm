@@ -21,6 +21,11 @@ public:
 		dfs( g, s );
 	}
 
+	~DepthFirstSearch()
+	{
+		delete [] _marked;
+	}
+
 	bool marked( int w )
 	{
 		return _marked[w];
@@ -61,6 +66,13 @@ public:
 		_s = s;
 		dfs( g, s );
 	}
+
+	~DepthFirstPath()
+	{
+		delete [] _marked;
+		delete [] _edgeTo;
+	}
+
 
 	bool hasPathTo( int v )
 	{
@@ -124,6 +136,11 @@ public:
 
 	}
 
+	~Cycle()
+	{
+		delete [] _marked;
+	}
+
 	bool hasCycle()
 	{
 		return _hasCycle;
@@ -157,19 +174,45 @@ private:
 	有向图寻找环
 
 */
-#include <stack>
+#include <list>
 class DirectedCycle
 {
 private:
 	bool* _marked;
 	int * _edgeTo;
-	std::stack<int> _cycle;
 	bool* _onStack;
+	std::list<int> _cycle;
 public:
 
 	DirectedCycle( const Digraph& g )
 	{
+		_marked = new bool[ g.V() ];
+		_edgeTo = new int[ g.V() ];
+		_onStack = new bool[ g.V() ];
+		for( int s = 0; s < g.V(); ++s )
+		{
+			if( !_marked[s])
+				dfs( g, s );
+		}
+	}
 
+	DirectedCycle( const EdgeWeightedDigraph& g )
+	{
+		_marked = new bool[ g.V() ];
+		_edgeTo = new int[ g.V() ];
+		_onStack = new bool[ g.V() ];
+		for( int s = 0; s < g.V(); ++s )
+		{
+			if( !_marked[s])
+				dfs( g, s );
+		}
+	}
+
+	~DirectedCycle()
+	{
+		delete [] _marked;
+		delete [] _edgeTo;
+		delete [] _onStack;
 	}
 
 	bool hasCycle()
@@ -177,7 +220,7 @@ public:
 		return !_cycle.empty();
 	}
 
-	std::stack<int>& cycle()
+	std::list<int>& cycle()
 	{
 		return _cycle;
 	}
@@ -201,15 +244,46 @@ private:
 			{
 				//found cycle
 				for( int x = v; x != w; x = _edgeTo[x] )
-					_cycle.push(x);
+					_cycle.push_front(x);
 
-				_cycle.push( w );
-				_cycle.push( v );
+				_cycle.push_front( w );
+				_cycle.push_front( v );
 			}
 		}
 
 		_onStack[v] = false;
 
+	}
+
+
+	void dfs( const EdgeWeightedDigraph& g, int v )
+	{
+		_onStack[v] = true;
+		_marked[v] = true;
+
+		for( DirectedEdge e : g.adj(v) )
+		{
+			int w = e.to();
+
+			if( hasCycle() )
+				return;
+			else if( !_marked[w] )
+			{
+				_edgeTo[w] = v;
+				dfs( g, w );
+			}
+			else if( _onStack[w] )
+			{
+				//found cycle
+				for( int x = v; x != w; x = _edgeTo[x] )
+					_cycle.push_front(x);
+
+				_cycle.push_front( w );
+				_cycle.push_front( v );
+			}
+		}
+
+		_onStack[v] = false;		
 	}
 
 
@@ -238,6 +312,12 @@ public:
 			if( !_marked[s] )
 				dfs(g,s);
 		}
+	}
+
+	~TwoColor()
+	{
+		delete [] _marked;
+		delete [] _color;
 	}
 
 	bool isBipartite()

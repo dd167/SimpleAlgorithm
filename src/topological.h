@@ -31,6 +31,16 @@ public:
 		}
 	}
 
+	Topological( const EdgeWeightedDigraph& g )
+	{
+		DirectedCycle cyclefinder( g );
+		if( !cyclefinder.hasCycle() )
+		{
+			DepthFirstOrder dfo(g);
+			_order = dfo.reversePost();
+		}
+	}
+
 	std::list<int>& order()
 	{
 		return _order;

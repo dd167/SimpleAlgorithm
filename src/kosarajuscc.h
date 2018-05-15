@@ -43,6 +43,12 @@ public:
 		}
 	}
 
+	~KosarajuSCC()
+	{
+		delete [] _marked;
+		delete [] _id;
+	}
+
 
 	bool stronglyConnected( int v, int w )
 	{
