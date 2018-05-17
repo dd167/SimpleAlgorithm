@@ -180,15 +180,19 @@ class DirectedCycle
 private:
 	bool* _marked;
 	int * _edgeTo;
-	bool* _onStack;
+	int * _onStack;
 	std::list<int> _cycle;
+
 public:
 
 	DirectedCycle( const Digraph& g )
 	{
 		_marked = new bool[ g.V() ];
 		_edgeTo = new int[ g.V() ];
-		_onStack = new bool[ g.V() ];
+		_onStack = new int[ g.V() ];
+		for( int i = 0; i < g.V(); ++i )
+			_onStack[i] = 0;
+
 		for( int s = 0; s < g.V(); ++s )
 		{
 			if( !_marked[s])
@@ -200,10 +204,13 @@ public:
 	{
 		_marked = new bool[ g.V() ];
 		_edgeTo = new int[ g.V() ];
-		_onStack = new bool[ g.V() ];
+		_onStack = new int[ g.V() ];
+		for( int i = 0; i < g.V(); ++i )
+			_onStack[i] = 0;
+
 		for( int s = 0; s < g.V(); ++s )
 		{
-			if( !_marked[s])
+			if( !_marked[s] )
 				dfs( g, s );
 		}
 	}
@@ -228,7 +235,7 @@ public:
 private:
 	void dfs( const Digraph& g, int v )
 	{
-		_onStack[v] = true;
+		_onStack[v] = 1;
 		_marked[v] = true;
 
 		for( int w : g.adj(v) )
@@ -240,25 +247,33 @@ private:
 				_edgeTo[w] = v;
 				dfs( g, w );
 			}
-			else if( _onStack[w] )
+			else if( _onStack[w] == 1 )
 			{
 				//found cycle
-				for( int x = v; x != w; x = _edgeTo[x] )
-					_cycle.push_front(x);
+				 for( int x = v; x != w; x = _edgeTo[x] )
+				 	_cycle.push_front(x);
 
-				_cycle.push_front( w );
-				_cycle.push_front( v );
+				 _cycle.push_front( w );
+				 _cycle.push_front( v );
 			}
 		}
-
-		_onStack[v] = false;
-
+		_onStack[v] = 0;
 	}
 
 
+	/*
+	 图中的一个节点，根据其C[N]的值，有三种状态：
+     0，此节点没有被访问过
+     -1，被访问过至少1次，其后代节点正在被访问中
+     1，其后代节点都被访问过。
+     按照这样的假设，当按照DFS进行搜索时，碰到一个节点时有三种可能：
+     1、如果C[V]=0，这是一个新的节点，不做处理
+     2、如果C[V]=-1，说明是在访问该节点的后代的过程中访问到该节点本身，则图中有环。
+     3、如果C[V]=1，类似于2的推导，没有环。    在程序中加上一些特殊的处理，即可以找出图中有几个环，并记录每个环的路径
+	*/
 	void dfs( const EdgeWeightedDigraph& g, int v )
 	{
-		_onStack[v] = true;
+		_onStack[v] = -1;
 		_marked[v] = true;
 
 		for( DirectedEdge e : g.adj(v) )
@@ -267,23 +282,25 @@ private:
 
 			if( hasCycle() )
 				return;
-			else if( !_marked[w] )
+			
+			if( !_marked[w] )
 			{
 				_edgeTo[w] = v;
 				dfs( g, w );
 			}
-			else if( _onStack[w] )
+			else if( _onStack[w] == -1 )
 			{
+				//std::cout << "w=" << w << "; v= " << v << std::endl;
 				//found cycle
 				for( int x = v; x != w; x = _edgeTo[x] )
-					_cycle.push_front(x);
+				 	_cycle.push_front(x);
 
-				_cycle.push_front( w );
-				_cycle.push_front( v );
+				 _cycle.push_front( w );
+				 _cycle.push_front( v );
 			}
 		}
 
-		_onStack[v] = false;		
+		_onStack[v] = 1;		
 	}
 
 
