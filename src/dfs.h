@@ -182,7 +182,6 @@ private:
 	int * _edgeTo;
 	int * _onStack;
 	std::list<int> _cycle;
-
 public:
 
 	DirectedCycle( const Digraph& g )
@@ -200,21 +199,7 @@ public:
 		}
 	}
 
-	DirectedCycle( const EdgeWeightedDigraph& g )
-	{
-		_marked = new bool[ g.V() ];
-		_edgeTo = new int[ g.V() ];
-		_onStack = new int[ g.V() ];
-		for( int i = 0; i < g.V(); ++i )
-			_onStack[i] = 0;
-
-		for( int s = 0; s < g.V(); ++s )
-		{
-			if( !_marked[s] )
-				dfs( g, s );
-		}
-	}
-
+	
 	~DirectedCycle()
 	{
 		delete [] _marked;
@@ -259,7 +244,52 @@ private:
 		}
 		_onStack[v] = 0;
 	}
+};
 
+
+
+class EdgeWeightedCycle
+{
+private:
+	bool* _marked;
+	DirectedEdge * _edgeTo;
+	int * _onStack;
+	std::list<DirectedEdge> _cycle;
+public:
+
+	EdgeWeightedCycle( const EdgeWeightedDigraph& g )
+	{
+		_marked = new bool[ g.V() ];
+		_edgeTo = new DirectedEdge[ g.V() ];
+		_onStack = new int[ g.V() ];
+		for( int i = 0; i < g.V(); ++i )
+			_onStack[i] = 0;
+
+		for( int s = 0; s < g.V(); ++s )
+		{
+			if( !_marked[s] )
+				dfs( g, s );
+		}
+	}
+
+	~EdgeWeightedCycle()
+	{
+		delete [] _marked;
+		delete [] _edgeTo;
+		delete [] _onStack;
+	}
+
+	bool hasCycle()
+	{
+		return !_cycle.empty();
+	}
+
+	std::list<DirectedEdge>& cycle()
+	{
+		return _cycle;
+	}
+
+private:
 
 	/*
 	 图中的一个节点，根据其C[N]的值，有三种状态：
@@ -285,26 +315,27 @@ private:
 			
 			if( !_marked[w] )
 			{
-				_edgeTo[w] = v;
+				_edgeTo[w] = e;
 				dfs( g, w );
 			}
 			else if( _onStack[w] == -1 )
 			{
 				//std::cout << "w=" << w << "; v= " << v << std::endl;
 				//found cycle
-				for( int x = v; x != w; x = _edgeTo[x] )
-				 	_cycle.push_front(x);
-
-				 _cycle.push_front( w );
-				 _cycle.push_front( v );
+				DirectedEdge f = e;
+                while (f.from() != w) 
+                {
+                    _cycle.push_front(f);
+                    f = _edgeTo[f.from()];
+                }
+                _cycle.push_front(f);
 			}
 		}
 
 		_onStack[v] = 1;		
 	}
-
-
 };
+
 
 
 

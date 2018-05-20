@@ -64,7 +64,7 @@ int main()
 		g2.addEdge(6, 4, 0.93);
 
 
-		DirectedCycle cycleFinder(g2);
+		EdgeWeightedCycle cycleFinder(g2);
 		if( cycleFinder.hasCycle() )
 		{
 			std::cout << "g2 has Cycle!" << std::endl;
@@ -92,6 +92,50 @@ int main()
 				}
 				std::cout << std::endl;
 			}
+		}
+	}
+
+
+	std::cout << std::endl << "Bellman-Ford Test:" << std::endl;
+	{
+		EdgeWeightedDigraph g3(8);
+		g3.addEdge( 4, 5, 0.35 );
+		g3.addEdge( 5, 4, -0.66 );
+		g3.addEdge( 4, 7, 0.37 );
+		g3.addEdge( 5, 7, 0.28 );
+		g3.addEdge( 7, 5, 0.28 );
+		g3.addEdge( 5, 1, 0.32 );
+		g3.addEdge( 0, 4, 0.38 );
+		g3.addEdge( 0, 2, 0.26 );
+		g3.addEdge( 7, 3, 0.39 );
+		g3.addEdge( 1, 3, 0.29 );
+		g3.addEdge( 2, 7, 0.34 );
+		g3.addEdge( 6, 2, 0.40 );
+		g3.addEdge( 3, 6, 0.52 );
+		g3.addEdge( 6, 0, 0.58 );
+		g3.addEdge( 6, 4, 0.93 );
+
+		int start = 5;
+		BellmanFordSP sp(g3, start);
+
+		for( int x = 0; x < 8; ++x )
+		{
+			bool hasPath = sp.hasPathTo(x);
+			double dist = sp.distTo(x);
+			std::cout << start << " to " << x << "(" << dist  << "):";
+			if( hasPath )
+			{
+				path = sp.pathTo(x);
+				for( auto e : path )
+				{
+					std::cout << e.toString() << " ";
+				}	
+			}
+			else
+			{
+				std::cout << "no path!";
+			}
+			std::cout << std::endl;
 		}
 	}
 	

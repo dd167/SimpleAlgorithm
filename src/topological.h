@@ -33,7 +33,7 @@ public:
 
 	Topological( const EdgeWeightedDigraph& g )
 	{
-		DirectedCycle cyclefinder( g );
+		EdgeWeightedCycle cyclefinder( g );
 		if( !cyclefinder.hasCycle() )
 		{
 			DepthFirstOrder dfo(g);
