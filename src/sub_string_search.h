@@ -30,6 +30,8 @@ public:
 
 /*
 	子字符串查找 - Knuth-Morris-Pratt
+	https://kb.cnblogs.com/page/176818/
+
 */
 class SubStringSearch_KMP
 {
