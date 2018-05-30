@@ -60,7 +60,7 @@ public:
 		 	_dfa[ pat[j] ][j] = j + 1; 		//设置匹配成功情况下的值
 		 	X = _dfa[ pat[j] ][X]; 			//更新重启状态
 
-		 	std::cout << "X=" << X << std::endl;
+		 	//std::cout << "X=" << X << std::endl;
 		}
 	
 	} 
@@ -87,6 +87,63 @@ public:
 	}
 };
 
+/*
+	字符串匹配算法之-BoyerMorre
+	对于长度为N的文本和长度为M的模式字符串，使用BoyerMorre的子字符串查找算法通过启发式处理不匹配的字符需要~N/M次字符比较
+*/
+
+class SubStringSearch_BoyerMoore
+{
+private:
+	int* _right;
+	std::string _pat;
+
+public:
+	SubStringSearch_BoyerMoore( const std::string& pat )
+	{
+		_pat = pat;
+		int M = pat.length();
+		int R = 256;
+		_right = new int[R];
+		for( int c = 0; c < 256; ++c )
+		{
+			_right[c] = -1;
+		}
+		for( int j = 0; j < M; ++j )
+		{
+			_right[ pat[j] ] = j;
+		}
+	}
+
+	~SubStringSearch_BoyerMoore()
+	{
+		delete [] _right;
+	}
+
+	int search( const std::string& txt, int startIndex = 0)
+	{
+		int N = txt.length();
+		int M = _pat.length();
+		int skip;
+		for( int i = startIndex; i <= N-M; i += skip )
+		{
+			skip = 0;
+			for( int j = M-1; j >= 0; --j )
+			{
+				if( _pat[j] != txt[i+j] )
+				{
+					skip = j - _right[txt[i+j]];
+					if( skip < 1 )
+						skip = 1;
+					break;
+				}
+			}
+			if( skip == 0 )
+				return i;
+		}
+		return -1;
+	}
+};
 
 
 
